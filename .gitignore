@@ -22,3 +22,10 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Project
+.env
+coverage
+test-results
+dev-dist
+.superpowers/
