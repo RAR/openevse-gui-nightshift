@@ -33,7 +33,7 @@ export default defineConfig(({ mode }) => {
         },
       }),
       compression({
-        algorithm: 'gzip',
+        algorithms: ['gzip'],
         deleteOriginalAssets: true,
         include: /\.(js|mjs|json|css|html|svg)$/i,
         exclude: /sw\.js$/i,
