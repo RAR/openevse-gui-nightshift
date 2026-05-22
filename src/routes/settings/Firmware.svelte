@@ -26,6 +26,21 @@
   let otaState = $derived($status_store?.ota)
   let otaProgress = $derived($status_store?.ota_progress ?? 0)
 
+  let reloadCountdown = $state(0)
+
+  $effect(() => {
+    if (otaState === 'completed' && reloadCountdown === 0) {
+      reloadCountdown = 6
+      const interval = setInterval(() => {
+        reloadCountdown -= 1
+        if (reloadCountdown <= 0) {
+          clearInterval(interval)
+          location.reload()
+        }
+      }, 1000)
+    }
+  })
+
   async function restart(device) {
     if (busy) return
     busy = true
@@ -112,7 +127,13 @@
     {#if otaState}
       <div class="mt-3">
         <ProgressBar value={otaProgress} />
-        <p class="mt-1 text-xs text-text-dim">{$_('config.firmware.ota_' + otaState)}</p>
+        <p class="mt-1 text-xs text-text-dim">
+          {#if reloadCountdown > 0}
+            {$_('config.firmware.ota_reload')}
+          {:else}
+            {$_('config.firmware.ota_' + otaState)}
+          {/if}
+        </p>
       </div>
     {/if}
   </ConfigSection>

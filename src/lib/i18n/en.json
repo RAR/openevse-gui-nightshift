@@ -298,6 +298,7 @@
       "ota_started": "Update in progress…",
       "ota_completed": "Update complete.",
       "ota_failed": "Update failed.",
+      "ota_reload": "Update complete — reloading…",
       "backup": "Configuration backup",
       "backup_desc": "Download the current configuration, secrets removed.",
       "backup_export": "Download backup",
