@@ -18,11 +18,19 @@
 <div class="flex justify-center py-1">
   <ProgressRing {fill} {color}>
     {#if display === 'charging'}
-      <div class="text-5xl font-extrabold leading-none text-text">{kw}</div>
-      <div class="mt-1 text-[11px] font-semibold tracking-widest text-accent">KW</div>
-      {#if maxKw}
-        <div class="mt-0.5 text-[9px] text-text-dim">{$_('dashboard.kw_max', { values: { max: maxKw } })}</div>
-      {/if}
+      <div class="relative h-full w-full">
+        <!-- kW value: centered both axes within the ring -->
+        <div class="absolute inset-0 grid place-items-center">
+          <div class="text-5xl font-extrabold leading-none text-text">{kw}</div>
+        </div>
+        <!-- KW label + max: stacked just below the centered value -->
+        <div class="absolute inset-x-0 top-1/2 flex flex-col items-center pt-6">
+          <div class="text-[11px] font-semibold tracking-widest text-accent">KW</div>
+          {#if maxKw}
+            <div class="mt-0.5 text-[9px] text-text-dim">{$_('dashboard.kw_max', { values: { max: maxKw } })}</div>
+          {/if}
+        </div>
+      </div>
     {:else if display === 'idle'}
       <div class="text-lg font-extrabold text-text-dim">{$_('dashboard.ring.ready')}</div>
       <div class="px-6 text-[9px] text-text-dim">{$_('dashboard.ring.ready_sub')}</div>
