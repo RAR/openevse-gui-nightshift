@@ -1,4 +1,4 @@
-# OpenEVSE GUI v3
+# openevse-gui-nightshift
 
 Replacement web UI for the OpenEVSE WiFi module. Svelte 5 + Vite + Tailwind.
 
@@ -39,3 +39,7 @@ device states (e.g. change `state` to `1` for standby, or adjust `amp` /
 Foundation + app shell complete. Primary screens (Dashboard, Schedule,
 Monitoring, History) and Configuration are tracked in
 `docs/superpowers/`.
+
+## License
+
+GPL-3.0-or-later. See [LICENSE](LICENSE).
