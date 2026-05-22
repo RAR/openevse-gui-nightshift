@@ -131,5 +131,82 @@
     },
     "eco": "Eco",
     "shaper": "Shaper"
+  },
+  "monitoring": {
+    "tab": { "data": "Data", "safety": "Safety", "manager": "Manager" },
+    "group": {
+      "energy": "Energy delivered",
+      "sensors": "Sensors",
+      "service": "Service",
+      "vehicle": "Vehicle"
+    },
+    "energy": {
+      "session": "Session",
+      "total": "Total",
+      "day": "Today",
+      "week": "This week",
+      "month": "This month",
+      "year": "This year"
+    },
+    "sensor": {
+      "pilot": "Pilot",
+      "current": "Current",
+      "voltage": "Voltage",
+      "evsetemp": "EVSE temperature",
+      "temp1": "Temp sensor 1",
+      "temp2": "Temp sensor 2",
+      "temp3": "Temp sensor 3",
+      "temp4": "Temp sensor 4",
+      "scale": "Sensor scale",
+      "offset": "Sensor offset"
+    },
+    "service": {
+      "level": "Service level",
+      "min": "Service min",
+      "max": "Service max"
+    },
+    "vehicle": {
+      "updated": "Last updated",
+      "battery": "Battery",
+      "range": "Range",
+      "timeleft": "Time to full"
+    },
+    "safety": {
+      "errors": "Errors",
+      "info": "Info",
+      "fault": "Current fault",
+      "gfci": "GFCI trips",
+      "noground": "No-ground trips",
+      "stuck": "Stuck relay",
+      "switches": "Relay switch count"
+    },
+    "manager": {
+      "empty": "No active claims",
+      "active": "Active",
+      "disabled": "Disabled"
+    }
+  },
+  "units": {
+    "kwh": "kWh",
+    "amp": "A",
+    "volt": "V",
+    "celsius": "°C",
+    "km": "km",
+    "miles": "mi",
+    "percent": "%"
+  },
+  "clients": {
+    "manual": "Manual",
+    "divert": "Solar divert",
+    "boost": "Boost",
+    "timer": "Timer",
+    "limit": "Limit",
+    "error": "Error",
+    "ohm": "OhmConnect",
+    "ocpp": "OCPP",
+    "rfid": "RFID",
+    "mqtt": "MQTT",
+    "shaper": "Load shaper",
+    "null": "—"
   }
 }
