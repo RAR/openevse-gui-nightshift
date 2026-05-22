@@ -48,4 +48,13 @@ describe('createSaveState', () => {
     s.fail('b')
     expect(get(s)).toEqual({ a: 'saving', b: 'error' })
   })
+
+  it('statusOf() returns the field status, idle when absent', () => {
+    const s = createSaveState()
+    expect(s.statusOf('hostname')).toBe('idle')
+    s.begin('hostname')
+    expect(s.statusOf('hostname')).toBe('saving')
+    s.fail('hostname')
+    expect(s.statusOf('hostname')).toBe('error')
+  })
 })
