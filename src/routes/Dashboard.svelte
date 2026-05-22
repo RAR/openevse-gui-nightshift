@@ -181,15 +181,21 @@
 
   <StatChips {charging} {live} {summary} />
 
+  <!-- The eco/shaper and mode controls stay in place during a fault —
+       visible but disabled — so the layout doesn't reflow. -->
+  <EcoShaperToggles
+    {showEco} {ecoOn} onEco={setEco}
+    {showShaper} {shaperOn} onShaper={setShaper}
+    disabled={busy || display === 'error'}
+  />
+
+  <ModeSelector
+    {mode}
+    disabled={busy || modeLocked || display === 'error'}
+    onmode={setMode}
+  />
+
   {#if display !== 'error'}
-    <EcoShaperToggles
-      {showEco} {ecoOn} onEco={setEco}
-      {showShaper} {shaperOn} onShaper={setShaper}
-      disabled={busy}
-    />
-
-    <ModeSelector {mode} disabled={busy || modeLocked} onmode={setMode} />
-
     {#key rateNonce}
       <ChargeRate
         amps={chargeAmps}
