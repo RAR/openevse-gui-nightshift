@@ -15,6 +15,10 @@ import Safety from '../routes/settings/Safety.svelte'
 import Time from '../routes/settings/Time.svelte'
 import Rfid from '../routes/settings/Rfid.svelte'
 import Vehicle from '../routes/settings/Vehicle.svelte'
+import Solar from '../routes/settings/Solar.svelte'
+import Shaper from '../routes/settings/Shaper.svelte'
+import Emoncms from '../routes/settings/Emoncms.svelte'
+import Ohmconnect from '../routes/settings/Ohmconnect.svelte'
 
 export const routes = {
   '/': Dashboard,
@@ -42,5 +46,11 @@ routes['/settings/safety'] = Safety
 routes['/settings/time'] = Time
 routes['/settings/rfid'] = Rfid
 routes['/settings/vehicle'] = Vehicle
+
+// Energy pages — override the placeholders set above.
+routes['/settings/solar'] = Solar
+routes['/settings/shaper'] = Shaper
+routes['/settings/emoncms'] = Emoncms
+routes['/settings/ohmconnect'] = Ohmconnect
 
 export { NotFound }
