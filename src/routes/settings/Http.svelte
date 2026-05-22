@@ -2,6 +2,7 @@
 <script>
   import { _, locales } from 'svelte-i18n'
   import { config_store } from '../../lib/stores/config.js'
+  import { LOCALE_NAMES } from '../../lib/i18n/locales.js'
   import { createConfigForm } from '../../lib/config/configForm.svelte.js'
   import ConfigPage from '../../lib/components/config/ConfigPage.svelte'
   import ConfigSection from '../../lib/components/config/ConfigSection.svelte'
@@ -27,7 +28,9 @@
     if (!next) form.saveFields({ www_username: '', www_password: '' })
   }
 
-  let langOptions = $derived(($locales ?? ['en']).map((l) => ({ value: l, label: l })))
+  let langOptions = $derived(
+    ($locales ?? ['en']).map((l) => ({ value: l, label: LOCALE_NAMES[l] ?? l })),
+  )
 </script>
 
 <ConfigPage title={$_('config.pages.http')}>
