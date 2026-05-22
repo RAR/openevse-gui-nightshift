@@ -14,7 +14,7 @@
   import { clientid2name, formatDate } from '../utils.js'
   import { serialQueue } from '../queue.js'
   import { onMount } from 'svelte'
-  import { locale } from 'svelte-i18n'
+  import { locale, locales } from 'svelte-i18n'
   import { _ } from 'svelte-i18n'
 
   // setTimeout instances
@@ -227,10 +227,13 @@
   }
 
   function refreshLocale(lang) {
-    if ($locale != $config_store?.lang) {
+    // The device reports its configured language; an empty string means
+    // "no preference". Only adopt a language this build actually ships —
+    // setting an empty/unbundled locale breaks message formatting.
+    if (!lang || !$locales.includes(lang)) return
+    if ($locale !== lang) {
       $locale = lang
-      let setting = { lang: $locale }
-      uisettings_store.set({ ...$uisettings_store, ...setting })
+      uisettings_store.set({ ...$uisettings_store, lang: $locale })
     }
   }
 
