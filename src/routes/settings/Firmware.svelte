@@ -168,16 +168,20 @@
       {/if}
       {#each channels() as ch}
         <div class="flex items-center gap-3 py-2 text-sm">
-          <span class="flex-1 text-text">
+          <span class="min-w-0 flex-1 text-text">
             {$_('config.firmware.channel_' + ch.key)}
             <span class="text-text-dim">· {ch.version}</span>
           </span>
-          <Button
-            label={$_('config.firmware.install_online')}
-            variant="ghost"
-            disabled={uploading}
-            onclick={() => installOnline(ch.asset)}
-          />
+          <!-- Button is w-full by default; wrap so it sizes to its label
+               instead of fighting the version text for horizontal space. -->
+          <div class="shrink-0">
+            <Button
+              label={$_('config.firmware.install_online')}
+              variant="ghost"
+              disabled={uploading}
+              onclick={() => installOnline(ch.asset)}
+            />
+          </div>
         </div>
       {/each}
     {/if}
