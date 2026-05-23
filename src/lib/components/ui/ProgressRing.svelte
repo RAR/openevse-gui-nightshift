@@ -14,6 +14,9 @@
   let inner = $derived(size - thickness * 2)
 </script>
 
+<!-- Animation lives in src/app.css (.breathe + @keyframes breathe) so
+     the Tailwind/Vite pipeline emits it; a scoped <style> block here
+     was getting stripped. -->
 <div
   class="grid place-items-center rounded-full"
   class:breathe={pulse}
@@ -26,20 +29,3 @@
     {@render children?.()}
   </div>
 </div>
-
-<style>
-  /* Slow opacity breath — telegraphs "we're sitting here waiting" or
-     "something needs your attention". Whole ring fades together so the
-     animation reads as one shape, not a flickering border. */
-  .breathe {
-    animation: breathe 2.6s ease-in-out infinite;
-  }
-  @keyframes breathe {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.55; }
-  }
-  /* Respect the OS reduced-motion preference. */
-  @media (prefers-reduced-motion: reduce) {
-    .breathe { animation: none; }
-  }
-</style>
