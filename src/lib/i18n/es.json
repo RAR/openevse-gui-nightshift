@@ -397,7 +397,7 @@
       "starting": "Iniciando",
       "charging": "Cargando",
       "idle": "Listo",
-      "connected": "Conectado",
+      "connected": "Vehículo conectado",
       "error": "Fallo"
     },
     "car_connected": "Vehículo conectado",

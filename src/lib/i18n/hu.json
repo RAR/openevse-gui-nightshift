@@ -397,7 +397,7 @@
       "starting": "Indulás",
       "charging": "Töltés",
       "idle": "Kész",
-      "connected": "Csatlakoztatva",
+      "connected": "Autó csatlakoztatva",
       "error": "Hiba"
     },
     "car_connected": "Autó csatlakoztatva",
