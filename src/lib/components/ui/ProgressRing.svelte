@@ -14,22 +14,24 @@
   let inner = $derived(size - thickness * 2)
 </script>
 
-<!-- @keyframes breathe lives in src/app.css; the animation is wired
-     via an inline style here because the class:breathe directive was
-     producing no visible effect in the bundle, possibly due to HMR
-     keeping a stale CSS rule. Inline style is foolproof. -->
+<!-- Three-layer stack so the pulse only animates the ring, not the
+     text on top. @keyframes breathe lives in src/app.css. -->
 <div
-  class="grid place-items-center rounded-full"
-  style="
-    width:{size}px;
-    height:{size}px;
-    background:conic-gradient({color} {deg}deg, {track} {deg}deg);
-    transform-origin:center;
-    {pulse ? 'animation: breathe 2.2s ease-in-out infinite;' : ''}
-  "
+  class="relative grid place-items-center"
+  style="width:{size}px;height:{size}px;"
 >
+  <!-- Ring (conic-gradient circle) — this is what breathes. -->
   <div
-    class="grid place-items-center rounded-full bg-surface text-center"
+    class="absolute inset-0 rounded-full"
+    style="
+      background:conic-gradient({color} {deg}deg, {track} {deg}deg);
+      transform-origin:center;
+      {pulse ? 'animation: breathe 2.2s ease-in-out infinite;' : ''}
+    "
+  ></div>
+  <!-- Inner disc + content — sits on top of the ring; stays static. -->
+  <div
+    class="relative grid place-items-center rounded-full bg-surface text-center"
     style="width:{inner}px;height:{inner}px;"
   >
     {@render children?.()}
