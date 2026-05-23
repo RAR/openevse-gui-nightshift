@@ -279,7 +279,8 @@
       "docs": "Documentation",
       "repo_wifi": "WiFi firmware on GitHub",
       "repo_evse": "EVSE firmware on GitHub",
-      "credit": "Powered by OpenEVSE and OpenEnergyMonitor"
+      "credit": "Powered by OpenEVSE and OpenEnergyMonitor",
+      "theme_by": "Nightshift theme by Andrew Rankin"
     },
     "certificates": {
       "installed": "Installed certificates",

@@ -279,7 +279,8 @@
       "docs": "Dokumentáció",
       "repo_wifi": "WiFi firmware a GitHub-on",
       "repo_evse": "EVSE firmware a GitHub-on",
-      "credit": "Az OpenEVSE és az OpenEnergyMonitor által működtetve"
+      "credit": "Az OpenEVSE és az OpenEnergyMonitor által működtetve",
+      "theme_by": "Nightshift téma: Andrew Rankin"
     },
     "certificates": {
       "installed": "Telepített tanúsítványok",

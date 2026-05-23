@@ -279,7 +279,8 @@
       "docs": "Documentación",
       "repo_wifi": "Firmware WiFi en GitHub",
       "repo_evse": "Firmware EVSE en GitHub",
-      "credit": "Desarrollado por OpenEVSE y OpenEnergyMonitor"
+      "credit": "Desarrollado por OpenEVSE y OpenEnergyMonitor",
+      "theme_by": "Tema Nightshift por Andrew Rankin"
     },
     "certificates": {
       "installed": "Certificados instalados",

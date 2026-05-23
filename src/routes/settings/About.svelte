@@ -36,4 +36,14 @@
   </ConfigSection>
 
   <p class="mt-4 text-center text-xs text-text-dim">{$_('config.about.credit')}</p>
+  <p class="mt-1 text-center text-xs text-text-dim">
+    <a
+      href="https://github.com/RAR/openevse-gui-nightshift"
+      target="_blank"
+      rel="noreferrer"
+      class="hover:text-accent hover:underline"
+    >
+      {$_('config.about.theme_by')}
+    </a>
+  </p>
 </ConfigPage>
