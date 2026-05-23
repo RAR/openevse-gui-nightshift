@@ -348,6 +348,7 @@
       "install_online": "Telepítés",
       "installed_badge": "Telepítve",
       "no_build": "Nincs verzió ehhez az eszközhöz",
+      "buildenv_for": "Megfelelő verziók keresése ehhez:",
       "install_confirm_title": "{channel} telepítése?",
       "install_confirm_body": "A töltő letölti a {version} verziót, telepíti és újraindul. A folyamatban lévő töltés leáll.",
       "install_confirm_yes": "Telepítés",

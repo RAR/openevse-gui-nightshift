@@ -348,6 +348,7 @@
       "install_online": "Installer",
       "installed_badge": "Installée",
       "no_build": "Aucune version pour cet appareil",
+      "buildenv_for": "Recherche de versions pour",
       "install_confirm_title": "Installer la version {channel} ?",
       "install_confirm_body": "Le chargeur va télécharger {version}, l'installer et redémarrer. Toute charge en cours sera arrêtée.",
       "install_confirm_yes": "Installer",

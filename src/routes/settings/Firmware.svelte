@@ -199,6 +199,12 @@
       {:else}
         <p class="mb-1 text-sm text-text-dim">{$_('config.firmware.up_to_date')}</p>
       {/if}
+      {#if buildenv}
+        <p class="mb-2 text-xs text-text-dim">
+          {$_('config.firmware.buildenv_for')}
+          <code class="rounded bg-surface-3 px-1 py-0.5 font-mono text-text">{buildenv}</code>
+        </p>
+      {/if}
       {#each channels() as ch}
         <div class="flex items-start gap-3 py-2 text-sm">
           <div class="min-w-0 flex-1">
@@ -212,14 +218,10 @@
           </div>
           <div class="shrink-0">
             {#if isInstalled(ch)}
-              <span
-                class="inline-block rounded-2xl border border-border px-3 py-1.5 text-xs font-semibold text-text-dim"
-              >
-                {$_('config.firmware.installed_badge')}
-              </span>
+              <!-- Same Button shape as Install, just disabled — keeps the
+                   right column visually aligned across all three rows. -->
+              <Button label={$_('config.firmware.installed_badge')} variant="ghost" disabled={true} />
             {:else if ch.asset}
-              <!-- Button is w-full by default; wrap so it sizes to its label
-                   instead of fighting the version text for horizontal space. -->
               <Button
                 label={$_('config.firmware.install_online')}
                 variant="ghost"
