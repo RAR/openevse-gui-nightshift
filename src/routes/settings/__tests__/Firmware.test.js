@@ -72,7 +72,7 @@ describe('Firmware page', () => {
     })
   })
 
-  it('calls /update with the asset URL when install online is clicked', async () => {
+  it('confirms before calling /update, then sends the asset URL', async () => {
     global.fetch = vi.fn(() =>
       Promise.resolve({
         ok: true,
@@ -85,11 +85,24 @@ describe('Firmware page', () => {
       }),
     )
     config_store.set({ firmware: '7.1.3', version: 'v1.0.0', buildenv: 'adafruit_featheresp32' })
-    const { getByText } = render(Firmware)
+    const { getByText, queryByText } = render(Firmware)
     await vi.waitFor(() => {
       expect(getByText('config.firmware.channel_release')).toBeInTheDocument()
     })
+
+    // First click opens the confirm dialog without firing /update.
     await fireEvent.click(getByText('config.firmware.install_online'))
+    expect(getByText('config.firmware.install_confirm_title')).toBeInTheDocument()
+    expect(httpAPI).not.toHaveBeenCalledWith('POST', '/update', expect.anything())
+
+    // Cancel takes the dialog away and still doesn't post.
+    await fireEvent.click(getByText('config.firmware.install_confirm_no'))
+    expect(queryByText('config.firmware.install_confirm_title')).toBeNull()
+    expect(httpAPI).not.toHaveBeenCalledWith('POST', '/update', expect.anything())
+
+    // Re-open and confirm — now we expect the POST.
+    await fireEvent.click(getByText('config.firmware.install_online'))
+    await fireEvent.click(getByText('config.firmware.install_confirm_yes'))
     await vi.waitFor(() => {
       expect(httpAPI).toHaveBeenCalledWith(
         'POST',
@@ -97,5 +110,25 @@ describe('Firmware page', () => {
         JSON.stringify({ url: 'https://example/fw.bin' }),
       )
     })
+  })
+
+  it('hides the stable row once the device is on that version', async () => {
+    global.fetch = vi.fn(() =>
+      Promise.resolve({
+        ok: true,
+        json: () =>
+          Promise.resolve([
+            { tag_name: 'v1.0.0', name: 'v1.0.0', prerelease: false, assets: [
+              { name: 'adafruit_featheresp32.bin', browser_download_url: 'u' },
+            ] },
+          ]),
+      }),
+    )
+    config_store.set({ firmware: '7.1.3', version: 'v1.0.0', buildenv: 'adafruit_featheresp32' })
+    const { getByText, queryByText } = render(Firmware)
+    await vi.waitFor(() => {
+      expect(getByText('config.firmware.up_to_date')).toBeInTheDocument()
+    })
+    expect(queryByText('config.firmware.channel_release')).toBeNull()
   })
 })

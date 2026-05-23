@@ -23,6 +23,9 @@
   let confirmReset = $state(false)
   let firmwareFile = $state(null)
   let uploading = $state(false)
+  // The currently-pending install confirmation, or null if no dialog is open.
+  // Carries the channel + asset so the dialog can show the version it'll flash.
+  let pendingInstall = $state(null)
 
   // /update is multipart; in dev the mock lives behind the /api proxy prefix.
   const updateUrl = import.meta.env.DEV ? '/api/update' : '/update'
@@ -45,12 +48,21 @@
     }
   })
 
+  // Once the device reports a terminal OTA state, release the local
+  // "uploading" gate. Until then the progress modal stays open even if the
+  // POST itself has returned (the actual flash happens on the device).
+  $effect(() => {
+    if (otaState === 'failed') uploading = false
+  })
+
   // ── online (GitHub) updates ─────────────────────────────────────────────
   let releases = $state(null) // null = loading, [] = failed/empty
   let buildenv = $derived($config_store?.buildenv ?? '')
   let installed = $derived($config_store?.version ?? '')
 
-  let channels = $derived(() => {
+  // All channels that have a build for this device's buildenv. The page
+  // uses this to decide whether to show the "no build available" message.
+  let availableChannels = $derived(() => {
     if (!releases) return []
     const c = classifyReleases(releases)
     return [
@@ -63,11 +75,21 @@
         version: rel?.name ?? rel?.tag_name ?? '',
         asset: findAsset(rel, buildenv),
       }))
-      .filter((ch) => ch.asset) // only channels with a build for this device
+      .filter((ch) => ch.asset)
   })
 
+  // The rows actually rendered: drop the stable row when we're already on
+  // it — the "up to date" banner says everything; the Install button would
+  // just be a foot-gun. Kept as a function to match the existing call-site
+  // pattern (`channels()`).
+  let channels = $derived(() =>
+    availableChannels().filter(
+      (ch) => !(ch.key === 'release' && !updateAvailable(ch.version, installed)),
+    ),
+  )
+
   let hasUpdate = $derived(
-    channels().some(
+    availableChannels().some(
       (ch) => ch.key === 'release' && updateAvailable(ch.version, installed),
     ),
   )
@@ -76,15 +98,29 @@
     releases = await fetchReleases()
   })
 
-  async function installOnline(asset) {
-    if (uploading) return
+  function requestInstall(ch) {
+    pendingInstall = ch
+  }
+
+  async function confirmInstall() {
+    const ch = pendingInstall
+    pendingInstall = null
+    if (!ch || uploading) return
     uploading = true
     try {
       const res = await serialQueue.add(() =>
-        httpAPI('POST', '/update', JSON.stringify({ url: asset.browser_download_url })),
+        httpAPI('POST', '/update', JSON.stringify({ url: ch.asset.browser_download_url })),
       )
-      if (!res || res === 'error') showWriteError()
-    } finally {
+      if (!res || res === 'error') {
+        showWriteError()
+        uploading = false
+        return
+      }
+      // Leave `uploading` true: the progress modal stays open until the
+      // device's status.ota flow takes over (ota_started → completed → reload).
+      // The completion effect below resets uploading on 'completed' or 'failed'.
+    } catch {
+      showWriteError()
       uploading = false
     }
   }
@@ -158,7 +194,7 @@
   <ConfigSection title={$_('config.firmware.online')}>
     {#if releases === null}
       <p class="py-2 text-sm text-text-dim">{$_('config.firmware.checking')}</p>
-    {:else if channels().length === 0}
+    {:else if availableChannels().length === 0}
       <p class="py-2 text-sm text-text-dim">{$_('config.firmware.github_error')}</p>
     {:else}
       {#if hasUpdate}
@@ -167,11 +203,16 @@
         <p class="mb-1 text-sm text-text-dim">{$_('config.firmware.up_to_date')}</p>
       {/if}
       {#each channels() as ch}
-        <div class="flex items-center gap-3 py-2 text-sm">
-          <span class="min-w-0 flex-1 text-text">
-            {$_('config.firmware.channel_' + ch.key)}
-            <span class="text-text-dim">· {ch.version}</span>
-          </span>
+        <div class="flex items-start gap-3 py-2 text-sm">
+          <div class="min-w-0 flex-1">
+            <div class="text-text">
+              {$_('config.firmware.channel_' + ch.key)}
+              <span class="text-text-dim">· {ch.version}</span>
+            </div>
+            <p class="mt-0.5 text-xs text-text-dim">
+              {$_('config.firmware.channel_' + ch.key + '_desc')}
+            </p>
+          </div>
           <!-- Button is w-full by default; wrap so it sizes to its label
                instead of fighting the version text for horizontal space. -->
           <div class="shrink-0">
@@ -179,7 +220,7 @@
               label={$_('config.firmware.install_online')}
               variant="ghost"
               disabled={uploading}
-              onclick={() => installOnline(ch.asset)}
+              onclick={() => requestInstall(ch)}
             />
           </div>
         </div>
@@ -187,7 +228,32 @@
     {/if}
   </ConfigSection>
 
-  <Modal visible={!!otaState} closable={false}>
+  <!-- Confirm before kicking off an online install. -->
+  <Modal visible={pendingInstall !== null} onclose={() => (pendingInstall = null)}>
+    <h2 class="mb-2 text-base font-semibold text-text">
+      {$_('config.firmware.install_confirm_title', {
+        values: { channel: pendingInstall ? $_('config.firmware.channel_' + pendingInstall.key) : '' },
+      })}
+    </h2>
+    <p class="mb-4 text-sm text-text-dim">
+      {$_('config.firmware.install_confirm_body', {
+        values: { version: pendingInstall?.version ?? '' },
+      })}
+    </p>
+    <div class="flex gap-2">
+      <Button label={$_('config.firmware.install_confirm_yes')} onclick={confirmInstall} />
+      <Button
+        label={$_('config.firmware.install_confirm_no')}
+        variant="ghost"
+        onclick={() => (pendingInstall = null)}
+      />
+    </div>
+  </Modal>
+
+  <!-- Progress: opens immediately when uploading starts, then yields to the
+       device's status.ota stream once those updates arrive. Stays open
+       through 'completed' → reload countdown. -->
+  <Modal visible={uploading || !!otaState} closable={false}>
     <h2 class="mb-4 text-base font-semibold text-text">
       {$_('config.firmware.ota_title')}
     </h2>
@@ -197,6 +263,8 @@
         {$_('config.firmware.ota_reload')} ({reloadCountdown}s)
       {:else if otaState}
         {$_('config.firmware.ota_' + otaState)}
+      {:else if uploading}
+        {$_('config.firmware.ota_starting')}
       {/if}
     </p>
   </Modal>

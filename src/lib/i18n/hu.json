@@ -340,9 +340,17 @@
       "update_found": "Elérhető egy frissítés.",
       "up_to_date": "A legújabb stabil verziót használja.",
       "channel_release": "Stabil",
+      "channel_release_desc": "Mindennapi használatra ajánlott.",
       "channel_prerelease": "Előzetes",
+      "channel_prerelease_desc": "A legújabb jelölt kiadás. Többnyire stabil, kisebb hibák lehetnek.",
       "channel_daily": "Fejlesztői",
-      "install_online": "Telepítés"
+      "channel_daily_desc": "Folyamatos build a main ágról. Bleeding edge — instabil lehet.",
+      "install_online": "Telepítés",
+      "install_confirm_title": "{channel} telepítése?",
+      "install_confirm_body": "A töltő letölti a {version} verziót, telepíti és újraindul. A folyamatban lévő töltés leáll.",
+      "install_confirm_yes": "Telepítés",
+      "install_confirm_no": "Mégse",
+      "ota_starting": "Frissítés indítása — a töltő letölti a verziót…"
     }
   },
   "nav": {

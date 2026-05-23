@@ -340,9 +340,17 @@
       "update_found": "Hay una actualización disponible.",
       "up_to_date": "Tienes la última versión estable.",
       "channel_release": "Estable",
+      "channel_release_desc": "Recomendado para uso diario.",
       "channel_prerelease": "Preversión",
+      "channel_prerelease_desc": "Última candidata a versión. Bastante estable; pueden quedar pequeños detalles.",
       "channel_daily": "Desarrollo",
-      "install_online": "Instalar"
+      "channel_daily_desc": "Compilación continua de la rama principal. Vanguardista — puede ser inestable.",
+      "install_online": "Instalar",
+      "install_confirm_title": "¿Instalar {channel}?",
+      "install_confirm_body": "El cargador descargará {version}, lo instalará y se reiniciará. La carga activa se detendrá.",
+      "install_confirm_yes": "Instalar",
+      "install_confirm_no": "Cancelar",
+      "ota_starting": "Iniciando actualización — el cargador está descargando la versión…"
     }
   },
   "nav": {
