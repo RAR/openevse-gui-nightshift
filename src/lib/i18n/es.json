@@ -552,7 +552,7 @@
     "finish": "Finalizar",
     "welcome": {
       "title": "Bienvenida",
-      "kicker": "Te damos la bienvenida a",
+      "kicker": "Te damos la bienvenida a OpenEVSE",
       "heading": "Vamos a configurar tu cargador",
       "body": "Solo unos pasos rápidos y estará listo para usar.",
       "captive_hint": "Si esto se abrió en una ventana de inicio de sesión, cambia a tu navegador real primero.",

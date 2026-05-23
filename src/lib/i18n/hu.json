@@ -552,7 +552,7 @@
     "finish": "Befejezés",
     "welcome": {
       "title": "Üdvözöljük",
-      "kicker": "Üdvözli az",
+      "kicker": "Üdvözli az OpenEVSE",
       "heading": "Állítsuk be a töltőt",
       "body": "Néhány gyors lépés, és a töltő használatra kész lesz.",
       "captive_hint": "Ha ez egy bejelentkezési ablakban nyílt meg, először váltson át a valódi böngészőre.",

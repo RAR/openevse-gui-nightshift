@@ -552,7 +552,7 @@
     "finish": "Finish",
     "welcome": {
       "title": "Welcome",
-      "kicker": "Welcome to",
+      "kicker": "Welcome to OpenEVSE",
       "heading": "Let's get set up",
       "body": "A few quick steps and your charger will be ready to use.",
       "captive_hint": "If this opened inside a sign-in window, switch to your real browser first.",
