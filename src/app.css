@@ -14,6 +14,7 @@
   --color-error: var(--error);
   --color-warning: var(--warning);
   --color-sleep: var(--sleep);
+  --color-success: var(--success);
 }
 
 /* Light theme — also the fallback when no data-theme is set */
@@ -30,6 +31,7 @@
   --error: #d6453d;
   --warning: #d98a2b;
   --sleep: #6792b3;
+  --success: #2ea052;
   --accent-glow: 0 0 0 transparent;
   color-scheme: light;
 }
@@ -46,6 +48,7 @@
   --error: #f06e66;
   --warning: #e7a948;
   --sleep: #7da7c8;
+  --success: #5dc975;
   --accent-glow: 0 0 8px rgba(60, 198, 189, 0.55);
   color-scheme: dark;
 }

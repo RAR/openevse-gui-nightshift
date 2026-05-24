@@ -197,7 +197,7 @@
       {#if hasUpdate}
         <p class="mb-1 text-sm text-accent">{$_('config.firmware.update_found')}</p>
       {:else}
-        <p class="mb-1 text-sm text-text-dim">{$_('config.firmware.up_to_date')}</p>
+        <p class="mb-1 text-sm text-success">{$_('config.firmware.up_to_date')}</p>
       {/if}
       {#each channels() as ch}
         <div class="flex items-start gap-3 py-2 text-sm">
