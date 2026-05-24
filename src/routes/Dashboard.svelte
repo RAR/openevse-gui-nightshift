@@ -218,8 +218,18 @@
       // Snapshot the current override so we can restore it. Empty object
       // means "Auto" (no override set).
       prevOverride = { ...($override_store || {}) }
+      // auto_release: false is intentional. The device defaults overrides
+      // to auto_release: true when the field is omitted, which (verified on
+      // live hardware) causes the manual override claim to be released soon
+      // after acceptance — a residual limit claim then re-emerges and pins
+      // state=disabled. Setting it false keeps the override sticky for the
+      // boost duration.
       const ok = await serialQueue.add(() =>
-        override_store.upload({ state: 'active', charge_current: $config_store?.max_current_soft }),
+        override_store.upload({
+          state: 'active',
+          charge_current: $config_store?.max_current_soft,
+          auto_release: false,
+        }),
       )
       if (!ok) {
         showWriteError()
@@ -231,7 +241,12 @@
         if (!prevOverride || !prevOverride.state) {
           await serialQueue.add(() => override_store.clear())
         } else {
-          await serialQueue.add(() => override_store.upload(prevOverride))
+          // Force auto_release: false here too — re-uploading the snapshot
+          // as-is would inherit the device's auto_release: true default and
+          // hit the same release path.
+          await serialQueue.add(() =>
+            override_store.upload({ ...prevOverride, auto_release: false }),
+          )
         }
       }, minutes * 60 * 1000)
     } finally {
