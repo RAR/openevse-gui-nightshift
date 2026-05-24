@@ -112,6 +112,75 @@ describe('Firmware page', () => {
     })
   })
 
+  it('lets the user retry after a failed OTA', async () => {
+    global.fetch = vi.fn(() =>
+      Promise.resolve({
+        ok: true,
+        json: () =>
+          Promise.resolve([
+            { tag_name: 'v9.9.9', name: 'v9.9.9', prerelease: false, assets: [
+              { name: 'adafruit_featheresp32.bin', browser_download_url: 'https://example/fw.bin' },
+            ] },
+          ]),
+      }),
+    )
+    config_store.set({ firmware: '7.1.3', version: 'v1.0.0', buildenv: 'adafruit_featheresp32' })
+    const { getByText, queryByText } = render(Firmware)
+    await vi.waitFor(() => {
+      expect(getByText('config.firmware.channel_release')).toBeInTheDocument()
+    })
+
+    // Trigger the first install.
+    await fireEvent.click(getByText('config.firmware.install_online'))
+    await fireEvent.click(getByText('config.firmware.install_confirm_yes'))
+    await vi.waitFor(() => {
+      expect(httpAPI).toHaveBeenCalledWith('POST', '/update', JSON.stringify({ url: 'https://example/fw.bin' }))
+    })
+
+    // Device pushes a failure. Retry + Close buttons should appear.
+    status_store.update((s) => ({ ...s, ota: 'failed' }))
+    await vi.waitFor(() => {
+      expect(getByText('config.firmware.ota_retry')).toBeInTheDocument()
+      expect(getByText('config.firmware.ota_close')).toBeInTheDocument()
+    })
+
+    // Retry → another POST with the same asset URL.
+    httpAPI.mockClear()
+    await fireEvent.click(getByText('config.firmware.ota_retry'))
+    await vi.waitFor(() => {
+      expect(httpAPI).toHaveBeenCalledWith('POST', '/update', JSON.stringify({ url: 'https://example/fw.bin' }))
+    })
+  })
+
+  it('Close button on a failed OTA hides the progress modal', async () => {
+    global.fetch = vi.fn(() =>
+      Promise.resolve({
+        ok: true,
+        json: () =>
+          Promise.resolve([
+            { tag_name: 'v9.9.9', name: 'v9.9.9', prerelease: false, assets: [
+              { name: 'adafruit_featheresp32.bin', browser_download_url: 'https://example/fw.bin' },
+            ] },
+          ]),
+      }),
+    )
+    config_store.set({ firmware: '7.1.3', version: 'v1.0.0', buildenv: 'adafruit_featheresp32' })
+    const { getByText, queryByText } = render(Firmware)
+    await vi.waitFor(() => {
+      expect(getByText('config.firmware.channel_release')).toBeInTheDocument()
+    })
+    await fireEvent.click(getByText('config.firmware.install_online'))
+    await fireEvent.click(getByText('config.firmware.install_confirm_yes'))
+    status_store.update((s) => ({ ...s, ota: 'failed' }))
+    await vi.waitFor(() => {
+      expect(getByText('config.firmware.ota_close')).toBeInTheDocument()
+    })
+    await fireEvent.click(getByText('config.firmware.ota_close'))
+    await vi.waitFor(() => {
+      expect(queryByText('config.firmware.ota_failed')).toBeNull()
+    })
+  })
+
   it('shows the stable row with an Installed badge instead of Install when on it', async () => {
     global.fetch = vi.fn(() =>
       Promise.resolve({

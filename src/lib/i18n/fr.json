@@ -356,7 +356,9 @@
       "install_confirm_body": "Le chargeur va télécharger {version}, l'installer et redémarrer. Toute charge en cours sera arrêtée.",
       "install_confirm_yes": "Installer",
       "install_confirm_no": "Annuler",
-      "ota_starting": "Démarrage de la mise à jour — le chargeur télécharge la version…"
+      "ota_starting": "Démarrage de la mise à jour — le chargeur télécharge la version…",
+      "ota_retry": "Réessayer",
+      "ota_close": "Fermer"
     }
   },
   "nav": {

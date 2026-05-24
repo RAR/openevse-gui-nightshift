@@ -356,7 +356,9 @@
       "install_confirm_body": "El cargador descargará {version}, lo instalará y se reiniciará. La carga activa se detendrá.",
       "install_confirm_yes": "Instalar",
       "install_confirm_no": "Cancelar",
-      "ota_starting": "Iniciando actualización — el cargador está descargando la versión…"
+      "ota_starting": "Iniciando actualización — el cargador está descargando la versión…",
+      "ota_retry": "Reintentar",
+      "ota_close": "Cerrar"
     }
   },
   "nav": {

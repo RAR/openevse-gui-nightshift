@@ -356,7 +356,9 @@
       "install_confirm_body": "A töltő letölti a {version} verziót, telepíti és újraindul. A folyamatban lévő töltés leáll.",
       "install_confirm_yes": "Telepítés",
       "install_confirm_no": "Mégse",
-      "ota_starting": "Frissítés indítása — a töltő letölti a verziót…"
+      "ota_starting": "Frissítés indítása — a töltő letölti a verziót…",
+      "ota_retry": "Újra",
+      "ota_close": "Bezárás"
     }
   },
   "nav": {

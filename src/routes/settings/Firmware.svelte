@@ -26,6 +26,13 @@
   // The currently-pending install confirmation, or null if no dialog is open.
   // Carries the channel + asset so the dialog can show the version it'll flash.
   let pendingInstall = $state(null)
+  // The last install attempted — kept so the Retry button after a failed OTA
+  // can re-fire confirmInstall() with the same channel/asset.
+  let lastInstall = $state(null)
+  // The user clicked "Close" on a failed OTA modal. We hide the modal until
+  // a new install fires (which clears this) or the device pushes a different
+  // ota state.
+  let failedDismissed = $state(false)
 
   // /update is multipart; in dev the mock lives behind the /api proxy prefix.
   const updateUrl = import.meta.env.DEV ? '/api/update' : '/update'
@@ -99,10 +106,18 @@
     pendingInstall = ch
   }
 
+  function retryInstall() {
+    if (!lastInstall) return
+    pendingInstall = lastInstall
+    confirmInstall()
+  }
+
   async function confirmInstall() {
     const ch = pendingInstall
     pendingInstall = null
     if (!ch || uploading) return
+    lastInstall = ch         // remembered so Retry can re-fire this same install
+    failedDismissed = false  // user is trying again — reopen the progress modal
     uploading = true
     try {
       const res = await serialQueue.add(() =>
@@ -265,8 +280,10 @@
 
   <!-- Progress: opens immediately when uploading starts, then yields to the
        device's status.ota stream once those updates arrive. Stays open
-       through 'completed' → reload countdown. -->
-  <Modal visible={uploading || !!otaState} closable={false}>
+       through 'completed' → reload countdown. On 'failed', shows Retry +
+       Close so the user can re-fire the same install without resetting
+       the device. -->
+  <Modal visible={(uploading || !!otaState) && !(otaState === 'failed' && failedDismissed)} closable={false}>
     <h2 class="mb-4 text-base font-semibold text-text">
       {$_('config.firmware.ota_title')}
     </h2>
@@ -280,6 +297,18 @@
         {$_('config.firmware.ota_starting')}
       {/if}
     </p>
+    {#if otaState === 'failed' && !uploading}
+      <div class="mt-4 flex gap-2">
+        {#if lastInstall}
+          <Button label={$_('config.firmware.ota_retry')} onclick={retryInstall} />
+        {/if}
+        <Button
+          label={$_('config.firmware.ota_close')}
+          variant="ghost"
+          onclick={() => (failedDismissed = true)}
+        />
+      </div>
+    {/if}
   </Modal>
 
   <ConfigSection title={$_('config.firmware.update')}>

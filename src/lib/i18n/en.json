@@ -356,7 +356,9 @@
       "install_confirm_body": "The charger will download {version}, flash it, and restart. Active charging will stop.",
       "install_confirm_yes": "Install",
       "install_confirm_no": "Cancel",
-      "ota_starting": "Starting update — the charger is downloading the build…"
+      "ota_starting": "Starting update — the charger is downloading the build…",
+      "ota_retry": "Try again",
+      "ota_close": "Close"
     }
   },
   "nav": {
