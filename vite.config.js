@@ -16,6 +16,11 @@ export default defineConfig(({ mode }) => {
       tailwindcss(),
       ...(isMock ? [mockPlugin()] : []),
       VitePWA({
+        // Graceful PWA sunset: new users never get a SW registered
+        // (`injectRegister: null`), and any user who installed an older
+        // SW-enabled build gets a self-destroying SW that unregisters
+        // itself + clears caches on next visit (see dist/sw.js).
+        // The manifest stays so "Add to Home Screen" still works.
         registerType: 'autoUpdate',
         injectRegister: null,
         selfDestroying: true,
