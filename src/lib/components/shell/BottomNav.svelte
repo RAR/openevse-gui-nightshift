@@ -11,6 +11,15 @@
     { href: '/history', key: 'nav.history', icon: 'mdi:history' },
     { href: '/settings', key: 'nav.settings', icon: 'mdi:cog-outline' },
   ]
+
+  // Highlight the parent tab while inside its sub-routes (e.g. /settings
+  // *and* /settings/firmware both light up the Settings tab). The Home
+  // item is the special case — '/'.startsWith('/') is true for everything,
+  // so it gets a strict equality check.
+  function isActive(item, p) {
+    if (item.href === '/') return p === '/'
+    return p === item.href || p.startsWith(item.href + '/')
+  }
 </script>
 
 <!-- Total height = 56px button row + the home-indicator inset, with
@@ -30,10 +39,10 @@
     <a
       href="#{item.href}"
       aria-label={$_(item.key)}
-      aria-current={path === item.href ? 'page' : undefined}
+      aria-current={isActive(item, path) ? 'page' : undefined}
       class="flex flex-1 flex-col items-center justify-center gap-1 text-[10px]
              sm:flex-none sm:py-4
-             {path === item.href ? 'text-accent' : 'text-text-dim'}"
+             {isActive(item, path) ? 'text-accent' : 'text-text-dim'}"
     >
       <Icon icon={item.icon} size={22} />
       <span>{$_(item.key)}</span>
