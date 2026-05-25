@@ -5,7 +5,7 @@ describe('EvseClients', () => {
   it('should have all expected client keys', () => {
     const expectedKeys = [
       'manual', 'divert', 'boost', 'timer', 'limit',
-      'error', 'ohm', 'ocpp', 'rfid', 'mqtt', 'shaper'
+      'error', 'ohm', 'ocpp', 'rfid', 'mqtt', 'shaper', 'tempThrottle'
     ]
     expect(Object.keys(EvseClients)).toEqual(expectedKeys)
   })
@@ -28,6 +28,7 @@ describe('EvseClients', () => {
     expect(EvseClients.rfid.id).toBe(65546)
     expect(EvseClients.mqtt.id).toBe(65547)
     expect(EvseClients.shaper.id).toBe(65548)
+    expect(EvseClients.tempThrottle.id).toBe(0x0001000D)
   })
 
   it('should have correct priority values', () => {
@@ -42,6 +43,7 @@ describe('EvseClients', () => {
     expect(EvseClients.rfid.priority).toBe(1030)
     expect(EvseClients.mqtt.priority).toBe(500)
     expect(EvseClients.shaper.priority).toBe(5000)
+    expect(EvseClients.tempThrottle.priority).toBe(10000)
   })
 
   it('error client should have highest priority', () => {
@@ -61,5 +63,9 @@ describe('EvseClients', () => {
       expect(typeof client.id).toBe('number')
       expect(typeof client.priority).toBe('number')
     }
+  })
+
+  it('exposes the temperature-throttle client with id 0x0001000D and Safety priority', () => {
+    expect(EvseClients.tempThrottle).toEqual({ id: 0x0001000D, priority: 10000 })
   })
 })
