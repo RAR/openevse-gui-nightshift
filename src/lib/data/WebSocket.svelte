@@ -27,6 +27,7 @@
   })
   onDestroy(() => {
     if (socket) socket.close()
+    socket = null
     cancelKeepAlive()
     cancelReconnect()
     if (typeof window !== 'undefined') {
@@ -39,21 +40,29 @@
     const proto = location.protocol === 'https:' ? 'wss://' : 'ws://'
     const s = new globalThis.WebSocket(proto + window.location.host + '/ws')
     socket = s
+    // Every handler guards with `s !== socket`: when teardownAndReconnect()
+    // (or any other path) replaces the active socket, the stale events
+    // from the old one become no-ops instead of clobbering the new
+    // socket's connection state.
     s.addEventListener('open', () => {
+      if (s !== socket) return
       $uistates_store.ws_connected = true
       reconnectDelay = RECONNECT_MIN
       keepAlive(s)
     })
     s.addEventListener('message', (e) => {
+      if (s !== socket) return
       lastmsg = DateTime.now().toUnixInteger()
       if (parseMessage(e.data.toString())) ping_cnt = 0
     })
     s.addEventListener('error', () => {
+      if (s !== socket) return
       lastmsg = DateTime.now().toUnixInteger()
       $uistates_store.ws_connected = false
       cancelKeepAlive()
     })
     s.addEventListener('close', () => {
+      if (s !== socket) return
       lastmsg = DateTime.now().toUnixInteger()
       cancelKeepAlive()
       $uistates_store.ws_connected = false
@@ -77,27 +86,30 @@
     }
   }
 
-  // Network came back — drop any pending backoff and try immediately. If we
-  // already have a healthy socket this is a no-op (close handler ignored).
-  function handleOnline() {
+  // Replace whatever socket we have with a fresh one. iOS PWA quirk: after a
+  // background suspend the socket can come back in a "OPEN but actually dead"
+  // state — readyState lies, no close event fires, sends silently drop. So
+  // we don't trust readyState and don't probe; we just tear down and
+  // reconnect from scratch. The old socket's eventual close/error events
+  // are ignored thanks to the `s !== socket` guards above.
+  function teardownAndReconnect() {
+    cancelReconnect()
+    cancelKeepAlive()
     reconnectDelay = RECONNECT_MIN
-    if (!socket || socket.readyState === socket.CLOSED) {
-      cancelReconnect()
-      connect2socket()
-    }
+    ping_cnt = 0
+    const old = socket
+    socket = null
+    if (old) try { old.close() } catch { /* already closed */ }
+    connect2socket()
   }
 
-  // Page returned to foreground — iOS pauses everything in background and the
-  // socket may be silently dead. Probe with a ping; close() forces a fresh
-  // connect via the existing close handler.
+  function handleOnline() {
+    teardownAndReconnect()
+  }
+
   function handleVisibility() {
     if (document.visibilityState !== 'visible') return
-    reconnectDelay = RECONNECT_MIN
-    if (!socket || socket.readyState !== socket.OPEN) {
-      cancelReconnect()
-      if (socket) try { socket.close() } catch { /* already closed */ }
-      else connect2socket()
-    }
+    teardownAndReconnect()
   }
 
   function parseMessage(msg) {
@@ -111,6 +123,7 @@
   }
 
   function keepAlive(s) {
+    if (s !== socket) return // stale recursion from a torn-down socket
     const now = DateTime.now().toUnixInteger()
     const timing = now - lastmsg
     if ((!ping_cnt && timing >= 5) || (ping_cnt && ping_cnt <= 3)) {
