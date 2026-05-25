@@ -14,6 +14,7 @@
   import MetricsTab from '../lib/components/monitoring/MetricsTab.svelte'
   import SafetyTab from '../lib/components/monitoring/SafetyTab.svelte'
   import ManagerTab from '../lib/components/monitoring/ManagerTab.svelte'
+  import EnergyTab from '../lib/components/monitoring/EnergyTab.svelte'
 
   let activeTab = $state(0)
 
@@ -38,6 +39,7 @@
     { label: $_('monitoring.tab.data'), alert: false },
     { label: $_('monitoring.tab.safety'), alert: hasError },
     { label: $_('monitoring.tab.manager'), alert: false },
+    { label: $_('monitoring.tab.energy'), alert: false },
   ])
 </script>
 
@@ -51,8 +53,10 @@
       <MetricsTab {groups} />
     {:else if activeTab === 1}
       <SafetyTab data={safety} />
-    {:else}
+    {:else if activeTab === 2}
       <ManagerTab rows={claims} />
+    {:else}
+      <EnergyTab />
     {/if}
   </div>
 </section>
