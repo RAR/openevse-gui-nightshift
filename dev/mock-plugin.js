@@ -28,6 +28,10 @@ export function mockPlugin() {
     '/api/override':      loadFixture('override.json'),
     '/api/claims/target': loadFixture('claims_target.json'),
     '/api/certificates':  loadFixture('certificates.json'),
+    '/api/energy/raw':    loadFixture('energy_raw.json'),
+    '/api/energy/daily':  '{"daily":[]}',
+    '/api/energy/monthly':'{"monthly":[]}',
+    '/api/energy/annual': '{"annual":[]}',
   }
 
   // Base status object for WebSocket messages
@@ -51,6 +55,13 @@ export function mockPlugin() {
     configureServer(server) {
       // ── HTTP mock middleware ──────────────────────────────────────────────
       server.middlewares.use((req, res, next) => {
+        // /api/energy/raw?before=... must return empty before query is stripped
+        if (req.url?.startsWith('/api/energy/raw?') && req.url.includes('before=')) {
+          res.writeHead(200, { 'Content-Type': 'application/json' })
+          res.end('{"samples":[]}')
+          return
+        }
+
         const url = req.url?.split('?')[0] // strip query string
 
         // RFID scan acknowledgement
