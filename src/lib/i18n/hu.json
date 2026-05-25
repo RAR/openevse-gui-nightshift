@@ -161,7 +161,11 @@
       "faults": "Hibaszámlálók",
       "gfci_count": "GFCI hibák",
       "noground_count": "Földelés nélküli hibák",
-      "stuck_count": "Beragadt relé hibák"
+      "stuck_count": "Beragadt relé hibák",
+      "temp_throttle": "Hőmérséklet-szabályozás",
+      "temp_throttle_enable": "Hőmérséklet-szabályozás bekapcsolása",
+      "temp_throttle_setpoint": "Beállított érték",
+      "temp_throttle_desc": "Automatikusan csökkenti a töltőáramot, ha az EVSE eléri a beállított hőmérsékletet."
     },
     "time": {
       "status": "Eszköz ideje",
@@ -492,10 +496,14 @@
       "cancel": "Mégse",
       "active": "Boost · {time}",
       "cancel_active": "Boost megszakítása"
+    },
+    "throttle": {
+      "active": "Korlátozva · {amps} A",
+      "detail": "A hőmérséklet-szabályozás csökkenti a töltőáramot."
     }
   },
   "monitoring": {
-    "tab": { "data": "Adat", "safety": "Biztonság", "manager": "Kezelő" },
+    "tab": { "data": "Adat", "energy": "Energia", "safety": "Biztonság", "manager": "Kezelő" },
     "group": {
       "energy": "Leadott energia",
       "sensors": "Érzékelők",
@@ -508,7 +516,20 @@
       "day": "Ma",
       "week": "Ezen a héten",
       "month": "Ebben a hónapban",
-      "year": "Ebben az évben"
+      "year": "Ebben az évben",
+      "live": "Élő",
+      "daily": "Napi",
+      "monthly": "Havi",
+      "annual": "Éves",
+      "older": "← Korábbi",
+      "current": "Jelenlegi →",
+      "no_older": "Nincs korábbi adat",
+      "historical": "Korábbi nézet",
+      "latest_samples": "Utolsó {n} minta",
+      "loading": "Betöltés…",
+      "error": "Nem sikerült betölteni az energia adatokat",
+      "no_samples": "Még nincs rögzített minta",
+      "axis": { "current": "Áram (A)", "temperature": "Hőmérséklet (°C)", "energy": "Energia (Wh)" }
     },
     "sensor": {
       "pilot": "Pilot",

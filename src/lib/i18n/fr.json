@@ -161,7 +161,11 @@
       "faults": "Compteurs de défauts",
       "gfci_count": "Défauts GFCI",
       "noground_count": "Défauts de terre",
-      "stuck_count": "Défauts relais collé"
+      "stuck_count": "Défauts relais collé",
+      "temp_throttle": "Limitation thermique",
+      "temp_throttle_enable": "Activer la limitation thermique",
+      "temp_throttle_setpoint": "Seuil",
+      "temp_throttle_desc": "Réduit automatiquement le courant de charge lorsque l'EVSE atteint la température définie."
     },
     "time": {
       "status": "Heure de l'appareil",
@@ -492,10 +496,14 @@
       "cancel": "Annuler",
       "active": "Boost · {time}",
       "cancel_active": "Annuler le boost"
+    },
+    "throttle": {
+      "active": "Bridé · {amps} A",
+      "detail": "La limitation thermique réduit le courant de charge."
     }
   },
   "monitoring": {
-    "tab": { "data": "Données", "safety": "Sécurité", "manager": "Commandes" },
+    "tab": { "data": "Données", "energy": "Énergie", "safety": "Sécurité", "manager": "Commandes" },
     "group": {
       "energy": "Énergie délivrée",
       "sensors": "Capteurs",
@@ -508,7 +516,20 @@
       "day": "Aujourd'hui",
       "week": "Cette semaine",
       "month": "Ce mois",
-      "year": "Cette année"
+      "year": "Cette année",
+      "live": "En direct",
+      "daily": "Journalier",
+      "monthly": "Mensuel",
+      "annual": "Annuel",
+      "older": "← Précédent",
+      "current": "Actuel →",
+      "no_older": "Aucune donnée antérieure",
+      "historical": "Vue historique",
+      "latest_samples": "Derniers {n} échantillons",
+      "loading": "Chargement…",
+      "error": "Échec du chargement des données d'énergie",
+      "no_samples": "Aucun échantillon enregistré",
+      "axis": { "current": "Courant (A)", "temperature": "Température (°C)", "energy": "Énergie (Wh)" }
     },
     "sensor": {
       "pilot": "Pilote",

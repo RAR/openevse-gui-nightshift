@@ -161,7 +161,11 @@
       "faults": "Contadores de fallos",
       "gfci_count": "Fallos GFCI",
       "noground_count": "Fallos sin tierra",
-      "stuck_count": "Fallos de relé atascado"
+      "stuck_count": "Fallos de relé atascado",
+      "temp_throttle": "Reducción por temperatura",
+      "temp_throttle_enable": "Activar reducción por temperatura",
+      "temp_throttle_setpoint": "Punto de consigna",
+      "temp_throttle_desc": "Reduce automáticamente la corriente de carga cuando el EVSE alcanza la temperatura indicada."
     },
     "time": {
       "status": "Hora del dispositivo",
@@ -492,10 +496,14 @@
       "cancel": "Cancelar",
       "active": "Impulso · {time}",
       "cancel_active": "Cancelar impulso"
+    },
+    "throttle": {
+      "active": "Limitado · {amps} A",
+      "detail": "La reducción por temperatura está bajando la corriente de carga."
     }
   },
   "monitoring": {
-    "tab": { "data": "Datos", "safety": "Seguridad", "manager": "Gestor" },
+    "tab": { "data": "Datos", "energy": "Energía", "safety": "Seguridad", "manager": "Gestor" },
     "group": {
       "energy": "Energía entregada",
       "sensors": "Sensores",
@@ -508,7 +516,20 @@
       "day": "Hoy",
       "week": "Esta semana",
       "month": "Este mes",
-      "year": "Este año"
+      "year": "Este año",
+      "live": "En vivo",
+      "daily": "Diario",
+      "monthly": "Mensual",
+      "annual": "Anual",
+      "older": "← Anterior",
+      "current": "Actual →",
+      "no_older": "No hay datos anteriores",
+      "historical": "Vista histórica",
+      "latest_samples": "Últimas {n} muestras",
+      "loading": "Cargando…",
+      "error": "No se pudieron cargar los datos de energía",
+      "no_samples": "Aún no hay muestras registradas",
+      "axis": { "current": "Corriente (A)", "temperature": "Temperatura (°C)", "energy": "Energía (Wh)" }
     },
     "sensor": {
       "pilot": "Piloto",
