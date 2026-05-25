@@ -1,17 +1,7 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { render } from '@testing-library/svelte'
 
-// jsdom does not implement ResizeObserver or MutationObserver — stub them so
-// the $effect in UplotChart.svelte can run without throwing.
-globalThis.ResizeObserver = class {
-  observe() {}
-  unobserve() {}
-  disconnect() {}
-}
-globalThis.MutationObserver = class {
-  observe() {}
-  disconnect() {}
-}
+// ResizeObserver and MutationObserver stubs are configured in src/test-setup.js
 
 const ctor = vi.fn()
 const setData = vi.fn()
