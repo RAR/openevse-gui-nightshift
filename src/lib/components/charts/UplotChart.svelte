@@ -15,11 +15,22 @@
   /** @type {MutationObserver | null} */
   let mo = null
 
+  // Cached legend height — uPlot appends a sibling .u-legend div inside the
+  // container; in fill mode we have to reserve room for it so the canvas
+  // doesn't push it off the bottom. Estimate up front, refine after build.
+  let legendH = 28
+
+  function measureLegend() {
+    const el = container?.querySelector(':scope > .u-legend')
+    if (el) legendH = el.offsetHeight || legendH
+  }
+
   function computeSize() {
     const width = container.clientWidth || 600
     const fallback = (untrack(() => opts).height) ?? 260
-    const height = fill ? (container.clientHeight || fallback) : fallback
-    return { width, height }
+    if (!fill) return { width, height: fallback }
+    const total = container.clientHeight || fallback
+    return { width, height: Math.max(80, total - legendH) }
   }
 
   function rebuild() {
@@ -30,6 +41,15 @@
     const { width, height } = computeSize()
     const o = { ...currentOpts, width, height }
     chart = new uPlot(o, currentData, container)
+    if (fill) {
+      // Re-measure now that uPlot has appended .u-legend; if the actual
+      // height differs from our estimate, resize once to take it up.
+      requestAnimationFrame(() => {
+        const before = legendH
+        measureLegend()
+        if (chart && legendH !== before) chart.setSize(computeSize())
+      })
+    }
   }
 
   // Mount-only effect: builds the chart once, sets up observers, tears down on unmount.
