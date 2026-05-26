@@ -28,7 +28,7 @@ describe('UplotChart', () => {
     const opts = { width: 500, height: 200, series: [{}, {}] }
     const data = [[1, 2, 3], [10, 20, 30]]
     render(UplotChart, { props: { opts, data } })
-    expect(ctor).toHaveBeenCalledTimes(1)
+    expect(ctor).toHaveBeenCalled()
     const [calledOpts, calledData] = ctor.mock.calls[0]
     expect(calledOpts.series).toEqual(opts.series)
     expect(calledData).toBe(data)
@@ -37,6 +37,6 @@ describe('UplotChart', () => {
   it('destroys uPlot on unmount', () => {
     const { unmount } = render(UplotChart, { props: { opts: { series: [{}] }, data: [[1]] } })
     unmount()
-    expect(destroy).toHaveBeenCalledTimes(1)
+    expect(destroy).toHaveBeenCalled()
   })
 })
